@@ -1,22 +1,11 @@
 import React from 'react';
+import OneAlbum from './OneAlbum';
 
 export default () => (
   <div className='container'>
     <div id='albums' className='row wrap'>
-      <div className='album'>
-        <a>
-          <img src='default-album.jpg' />
-          <p>ALBUM 1</p>
-          <small>Artist Name</small>
-        </a>
-      </div>
-      <div className='album'>
-        <a>
-          <img src='default-album.jpg' />
-          <p>ALBUM 2</p>
-          <small>Artist Name</small>
-        </a>
-      </div>
+      <OneAlbum name='ALBUM 1' artist='Artist Name' />
+      <OneAlbum name='ALBUM 2' artist='Artist Name' />
     </div>
   </div>
 );
