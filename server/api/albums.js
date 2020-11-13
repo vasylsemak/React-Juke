@@ -4,6 +4,7 @@ const { Album, Artist } = require('../db/index.js');
 router.get('/', async (req, res, next) => {
   try {
     const albums = await Album.findAll({ include: [{ model: Artist }] });
+
     if(albums.length === 0) res.sendStatus(500);
     else res.status(200).json(albums);
   } catch (error) {
@@ -17,6 +18,7 @@ router.get('/:albumId', async (req, res, next) => {
       where: { id: req.params.albumId },
       include: [{ model: Artist }]
     });
+
     if(!album.id) res.sendStatus(500);
     else res.status(200).json(album);
   } catch (error) {
