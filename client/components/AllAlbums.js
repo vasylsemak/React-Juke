@@ -1,10 +1,8 @@
 import React from 'react';
-import OneAlbum from './OneAlbum';
+import Album from './Album';
 
 export default ({ albums }) => (
-  <div className='container'>
-    <div id='albums' className='row wrap'>
-      <OneAlbum albums={albums} />
-    </div>
+  <div id='albums' className='row wrap'>
+    <Album albums={albums} />
   </div>
 );
