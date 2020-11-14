@@ -5,7 +5,7 @@ export default ({ album }) => (
     {
       album.songs.map(s => (
         <tr key={s.id}>
-          <td><i class='fa fa-play-circle' /></td>
+          <td><i className='fa fa-play-circle' /></td>
           <td>{s.id}</td>
           <td>{s.name}</td>
           <td>{album.artist.name}</td>

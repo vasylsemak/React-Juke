@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Album, Artist } = require('../db/index.js');
+const { Album, Artist, Song } = require('../db/index.js');
 
 router.get('/', async (req, res, next) => {
   try {
@@ -16,7 +16,7 @@ router.get('/:albumId', async (req, res, next) => {
   try {
     const album = await Album.findOne({
       where: { id: req.params.albumId },
-      include: [{ model: Artist }]
+      include: [{ model: Artist }, { model: Song }]
     });
 
     if(!album.id) res.sendStatus(500);

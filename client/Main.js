@@ -10,28 +10,9 @@ export default class Main extends React.Component {
     super();
     this.state = {
       albums: [],
-      isSelected: false,
-      selectedAlbum: {
-        "id": 3,
-        "name": "Chain React-ion",
-        "artworkUrl": "default-album.jpg",
-        "artistId": 1,
-        "artist": {
-          "id": 1,
-          "name": "The Crash Test Dummies",
-        },
-        "songs": [
-          {
-            "id": 13,
-            "name": "Set Some State",
-            "audioUrl": "https://storage.googleapis.com/juke-1379.appspot.com/juke-music/Dexter%20Britain/Zenith/01%20Shooting%20Star.mp3",
-            "genre": "Instrumental",
-            "albumId": 2,
-            "artistId": 1
-          }
-        ]
-      }
+      selectedAlbum: {}
     }
+    this.handleClick = this.handleClick.bind(this);
   }
 
   async componentDidMount() {
@@ -39,13 +20,21 @@ export default class Main extends React.Component {
     this.setState(() => ({ albums: data }));
   }
 
+  async handleClick(albumId) {
+    const { data } = await axios.get(`/api/albums/${albumId}`);
+    this.setState(() => ({ selectedAlbum: data }));
+  }
+
   render () {
     return (
       <div id='main' className='row container'>
         <Sidebar />
-        <div class='container'>
-          {/* <AllAlbums albums={this.state.albums} /> */}
+        <div className='container'>
+          {!this.state.selectedAlbum.id ? (
+            <AllAlbums albums={this.state.albums} getAlbum={this.handleClick}/>
+          ) : (
           <SingleAlbum album={this.state.selectedAlbum} />
+          )}
         </div>
         <Player />
       </div>

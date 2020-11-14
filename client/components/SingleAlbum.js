@@ -2,8 +2,8 @@ import React from 'react';
 import Song from './Song';
 
 export default ({ album }) => (
-  <div id='single-album' class='column'>
-    <div class='album'>
+  <div id='single-album' className='column'>
+    <div className='album'>
       <a>
         <img src={album.artworkUrl} />
         <p>{album.name}</p>
@@ -12,7 +12,7 @@ export default ({ album }) => (
     </div>
     <table id='songs'>
       <tbody>
-        <tr class='gray'>
+        <tr className='gray'>
           <td />
           <td>#</td>
           <td>Name</td>
