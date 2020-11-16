@@ -12,7 +12,8 @@ export default class Main extends React.Component {
       albums: [],
       selectedAlbum: {}
     }
-    this.handleClick = this.handleClick.bind(this);
+    this.getAlbum = this.getAlbum.bind(this);
+    this.getAllAlbums = this.getAllAlbums.bind(this);
   }
 
   async componentDidMount() {
@@ -20,18 +21,22 @@ export default class Main extends React.Component {
     this.setState(() => ({ albums: data }));
   }
 
-  async handleClick(albumId) {
+  async getAlbum(albumId) {
     const { data } = await axios.get(`/api/albums/${albumId}`);
     this.setState(() => ({ selectedAlbum: data }));
+  }
+
+  getAllAlbums() {
+    this.setState(() => ({ selectedAlbum: {} }));
   }
 
   render () {
     return (
       <div id='main' className='row container'>
-        <Sidebar />
+        <Sidebar getAllAlbums={this.getAllAlbums} />
         <div className='container'>
           {!this.state.selectedAlbum.id ? (
-            <AllAlbums albums={this.state.albums} getAlbum={this.handleClick}/>
+            <AllAlbums albums={this.state.albums} getAlbum={this.getAlbum}/>
           ) : (
           <SingleAlbum album={this.state.selectedAlbum} />
           )}
