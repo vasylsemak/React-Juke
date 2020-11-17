@@ -18,13 +18,17 @@ export default class Main extends React.Component {
   }
 
   async componentDidMount() {
-    const { data } = await axios.get('/api/albums');
-    this.setState(() => ({ albums: data, play: false }));
+    try {
+      const { data } = await axios.get('/api/albums');
+      this.setState(() => ({ albums: data, play: false }));
+    } catch (err) { console.log(err, err.message) }
   }
 
   async getAlbum(albumId) {
-    const { data } = await axios.get(`/api/albums/${albumId}`);
-    this.setState(() => ({ selectedAlbum: data }));
+    try {
+      const { data } = await axios.get(`/api/albums/${albumId}`);
+      this.setState(() => ({ selectedAlbum: data }));
+    } catch (err) { console.log(err, err.message) }
   }
 
   play(audioUrl, songId, songName, artistName) {
