@@ -9,10 +9,11 @@ const audio = document.createElement('audio');
 export default class Main extends React.Component {
   constructor() {
     super();
-    this.state = { albums: [], selectedAlbum: {}, currentSong: {}, play: false }
+    this.state = { albums: [], selectedAlbum: {}, currentSong: {}, isPlaying: false }
 
-    this.togglePlay = this.togglePlay.bind(this);
     this.getAlbum = this.getAlbum.bind(this);
+    this.play = this.play.bind(this);
+    this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
   }
 
@@ -26,24 +27,24 @@ export default class Main extends React.Component {
     this.setState(() => ({ selectedAlbum: data }));
   }
 
-  togglePlay(audioUrl, songId, songName, artistName) {
-    if(!this.state.play) {
-      audio.src = audioUrl;
-      audio.play();
-      this.setState((state) => ({
-        play: !state.play,
-        currentSong: {
-          id: songId,
-          name: songName,
-          audio: audioUrl,
-          artist: artistName
-        }
-      }));
-    } else if(this.state.play) {
-      audio.pause();
-      this.setState((state) => ({ play: !state.play }));
-    }
+  play(audioUrl, songId, songName, artistName) {
+    audio.src = audioUrl;
+    audio.play();
+    this.setState((state) => ({
+      isPlaying: !state.isPlaying,
+      currentSong: {
+        id: songId,
+        name: songName,
+        audio: audioUrl,
+        artist: artistName
+      }
+    }));
   }
+
+  pause() {
+      audio.pause();
+      this.setState((state) => ({ isPlaying: !state.isPlaying }));
+    }
 
   reset() {
     this.setState(() => ({ selectedAlbum: {} }));
@@ -59,12 +60,17 @@ export default class Main extends React.Component {
           ) : (
             <SingleAlbum
               album={this.state.selectedAlbum}
-              togglePlay={this.togglePlay}
+              play={this.play}
               active={this.state.currentSong}
             />
           )}
         </div>
-        <Player />
+        <Player
+          active={this.state.currentSong}
+          play={this.play}
+          pause={this.pause}
+          isPlaying={this.state.isPlaying}
+        />
       </div>
     )
   }

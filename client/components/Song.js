@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-export default ({ album, togglePlay, active }) => (
+export default ({ album, play, active }) => (
   <Fragment>
     {
       album.songs.map(s => (
@@ -8,7 +8,7 @@ export default ({ album, togglePlay, active }) => (
           <td><i
             className={active.id === s.id ? '' : 'fa fa-play-circle'}
             onClick={() =>
-              togglePlay(`${s.audioUrl}`, s.id, s.name, album.artist.name)}
+              play(`${s.audioUrl}`, s.id, s.name, album.artist.name)}
             />
           </td>
           <td>{s.id}</td>
