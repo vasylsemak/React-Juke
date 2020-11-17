@@ -8,6 +8,15 @@ export default class Song extends React.Component {
     this.togglePlaying = this.togglePlaying.bind(this);
   }
 
+  componentDidMount() {
+    audio.addEventListener('ended', () => this.setState({ playing: false }));
+  }
+  componentWillUnmount() {
+    audio.load();
+    audio.removeEventListener('ended', () => this.setState({ playing: false }));
+  }
+
+
   togglePlaying() {
     if(!this.state.playing) {
       audio.play();
