@@ -13,7 +13,7 @@ export default class Main extends React.Component {
       selectedAlbum: {}
     }
     this.getAlbum = this.getAlbum.bind(this);
-    this.getAllAlbums = this.getAllAlbums.bind(this);
+    this.reset = this.reset.bind(this);
   }
 
   async componentDidMount() {
@@ -26,14 +26,14 @@ export default class Main extends React.Component {
     this.setState(() => ({ selectedAlbum: data }));
   }
 
-  getAllAlbums() {
+  reset() {
     this.setState(() => ({ selectedAlbum: {} }));
   }
 
-  render () {
+  render() {
     return (
       <div id='main' className='row container'>
-        <Sidebar getAllAlbums={this.getAllAlbums} />
+        <Sidebar reset={this.reset} />
         <div className='container'>
           {!this.state.selectedAlbum.id ? (
             <AllAlbums albums={this.state.albums} getAlbum={this.getAlbum}/>

@@ -15,6 +15,7 @@
     "express": "^4.17.1",
     "font-awesome": "^4.7.0",
     "pg": "^8.3.2",
+    "react-use-audio-player": "^1.2.4",
     "sequelize": "^6.3.4",
     "volleyball": "^1.5.1"
   },
