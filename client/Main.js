@@ -4,12 +4,12 @@ import Sidebar from './components/Sidebar';
 import Player from './components/Player';
 import AllAlbums from './components/AllAlbums';
 import SingleAlbum from './components/SingleAlbum';
-const audio = new Audio();
+const audio = document.createElement('audio');
 
 export default class Main extends React.Component {
   constructor() {
     super();
-    this.state = { albums: [], selectedAlbum: {}, play: false };
+    this.state = { albums: [], selectedAlbum: {}, currentSong: {}, play: false }
 
     this.togglePlay = this.togglePlay.bind(this);
     this.getAlbum = this.getAlbum.bind(this);
@@ -26,11 +26,19 @@ export default class Main extends React.Component {
     this.setState(() => ({ selectedAlbum: data }));
   }
 
-  togglePlay(audioUrl) {
+  togglePlay(audioUrl, songId, songName, artistName) {
     if(!this.state.play) {
       audio.src = audioUrl;
       audio.play();
-      this.setState((state) => ({ play: !state.play }));
+      this.setState((state) => ({
+        play: !state.play,
+        currentSong: {
+          id: songId,
+          name: songName,
+          audio: audioUrl,
+          artist: artistName
+        }
+      }));
     } else if(this.state.play) {
       audio.pause();
       this.setState((state) => ({ play: !state.play }));
@@ -52,7 +60,7 @@ export default class Main extends React.Component {
             <SingleAlbum
               album={this.state.selectedAlbum}
               togglePlay={this.togglePlay}
-              play={this.state.play}
+              active={this.state.currentSong}
             />
           )}
         </div>

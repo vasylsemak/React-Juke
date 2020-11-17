@@ -1,7 +1,7 @@
 import React from 'react';
 import Song from './Song';
 
-export default ({ album, togglePlay }) => (
+export default ({ album, togglePlay, active }) => (
   <div id='single-album' className='column'>
     <div className='album'>
       <a>
@@ -19,7 +19,7 @@ export default ({ album, togglePlay }) => (
           <td>Artist</td>
           <td>Genre</td>
         </tr>
-        <Song album={album} togglePlay={togglePlay} />
+        <Song album={album} togglePlay={togglePlay} active={active} />
       </tbody>
     </table>
   </div>
