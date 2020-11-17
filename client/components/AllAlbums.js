@@ -3,6 +3,10 @@ import Album from './Album';
 
 export default ({ albums, getAlbum }) => (
   <div id='albums' className='row wrap'>
-    <Album albums={albums} getAlbum={getAlbum} />
+  {
+    albums.map(album => (
+      <Album album={album} getAlbum={getAlbum} key={album.id} />
+    ))
+  }
   </div>
 );
