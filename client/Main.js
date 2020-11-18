@@ -13,7 +13,7 @@ export default class Main extends React.Component {
     this.state = {
       albums: [],
       selectedAlbum: {},
-      currentSong: {},
+      currentSongId: 0,
       playing: false
     }
 
@@ -21,6 +21,7 @@ export default class Main extends React.Component {
     this.play = this.play.bind(this);
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
+    this.resume = this.resume.bind(this);
   }
 
   async componentDidMount() {
@@ -41,7 +42,7 @@ export default class Main extends React.Component {
     AUDIO.src = song.audioUrl;
     AUDIO.load();
     AUDIO.play();
-    this.setState(() => ({ currentSong: song, playing: true }));
+    this.setState(() => ({ currentSongId: song.id, playing: true }));
   }
 
   pause() {
@@ -49,8 +50,13 @@ export default class Main extends React.Component {
     this.setState(() => ({ playing: false }));
   }
 
+  resume() {
+    AUDIO.play();
+    this.setState(() => ({ playing: true }));
+  }
+
   reset() {
-    this.setState(() => ({ selectedAlbum: {}, currentSong: {} }));
+    this.setState(() => ({ selectedAlbum: {}, currentSongId: 0 }));
   }
 
   render() {
@@ -63,7 +69,7 @@ export default class Main extends React.Component {
               ? <AllAlbums albums={this.state.albums} getAlbum={this.getAlbum}/>
               : <SingleAlbum
                   album={this.state.selectedAlbum}
-                  currId={this.state.currentSong.id}
+                  currId={this.state.currentSongId}
                   play={this.play}
                   pause={this.pause}
                   playing={this.state.playing}
@@ -71,10 +77,10 @@ export default class Main extends React.Component {
           }
         </div>
         <Player
-          active={this.state.currentSong}
-          play={this.play}
-          pause={this.pause}
+          currId={this.state.currentSongId}
           playing={this.state.playing}
+          pause={this.pause}
+          resume={this.resume}
         />
       </div>
     )

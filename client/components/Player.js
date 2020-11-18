@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default ({ active, play, pause, playing }) =>
-  !active.id ? null : (
+export default ({ currId, playing, pause, resume }) =>
+  !currId ? null : (
     <div id='player-container'>
       <div id='player-controls'>
         <div className='row center'>
@@ -11,7 +11,7 @@ export default ({ active, play, pause, playing }) =>
             onClick={
               playing
                 ? pause
-                : (() => play(active))
+                : resume
             }
           >
           </i>
