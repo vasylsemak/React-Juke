@@ -4,12 +4,18 @@ import Sidebar from './components/Sidebar';
 import Player from './components/Player';
 import AllAlbums from './components/AllAlbums';
 import SingleAlbum from './components/SingleAlbum';
-const audio = document.createElement('audio');
+
+const AUDIO = document.createElement('audio');
 
 export default class Main extends React.Component {
   constructor() {
     super();
-    this.state = { albums: [], selectedAlbum: {}, currentSong: {}, isPlaying: false }
+    this.state = {
+      albums: [],
+      selectedAlbum: {},
+      currentSong: {},
+      playing: false
+    }
 
     this.getAlbum = this.getAlbum.bind(this);
     this.play = this.play.bind(this);
@@ -20,7 +26,7 @@ export default class Main extends React.Component {
   async componentDidMount() {
     try {
       const { data } = await axios.get('/api/albums');
-      this.setState(() => ({ albums: data, play: false }));
+      this.setState(() => ({ albums: data }));
     } catch (err) { console.log(err, err.message) }
   }
 
@@ -31,27 +37,20 @@ export default class Main extends React.Component {
     } catch (err) { console.log(err, err.message) }
   }
 
-  play(audioUrl, songId, songName, artistName) {
-    audio.src = audioUrl;
-    audio.play();
-    this.setState((state) => ({
-      isPlaying: !state.isPlaying,
-      currentSong: {
-        id: songId,
-        name: songName,
-        audio: audioUrl,
-        artist: artistName
-      }
-    }));
+  play(song) {
+    AUDIO.src = song.audioUrl;
+    AUDIO.load();
+    AUDIO.play();
+    this.setState(() => ({ currentSong: song, playing: true }));
   }
 
   pause() {
-      audio.pause();
-      this.setState((state) => ({ isPlaying: !state.isPlaying }));
-    }
+    AUDIO.pause();
+    this.setState(() => ({ playing: false }));
+  }
 
   reset() {
-    this.setState(() => ({ selectedAlbum: {} }));
+    this.setState(() => ({ selectedAlbum: {}, currentSong: {} }));
   }
 
   render() {
@@ -59,21 +58,23 @@ export default class Main extends React.Component {
       <div id='main' className='row container'>
         <Sidebar reset={this.reset} />
         <div className='container'>
-          {!this.state.selectedAlbum.id ? (
-            <AllAlbums albums={this.state.albums} getAlbum={this.getAlbum}/>
-          ) : (
-            <SingleAlbum
-              album={this.state.selectedAlbum}
-              play={this.play}
-              active={this.state.currentSong}
-            />
-          )}
+          {
+            !this.state.selectedAlbum.id
+              ? <AllAlbums albums={this.state.albums} getAlbum={this.getAlbum}/>
+              : <SingleAlbum
+                  album={this.state.selectedAlbum}
+                  currId={this.state.currentSong.id}
+                  play={this.play}
+                  pause={this.pause}
+                  playing={this.state.playing}
+                />
+          }
         </div>
         <Player
           active={this.state.currentSong}
           play={this.play}
           pause={this.pause}
-          isPlaying={this.state.isPlaying}
+          playing={this.state.playing}
         />
       </div>
     )

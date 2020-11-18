@@ -1,18 +1,12 @@
 import React from 'react';
 
-export default ({ album, getAlbum }) => {
-  const name = album.name;
-  const albumId = album.id;
-  const artworkUrl = album.artworkUrl;
-  const artistName = album.artist.name;
+export default ({ album, getAlbum }) => (
+  <div className='album'>
+    <a onClick={() => getAlbum(album.id)}>
+      <img src={album.artworkUrl} />
+      <p>{album.name}</p>
+      <small>{album.artist.name}</small>
+    </a>
+  </div>
+)
 
-  return (
-    <div className='album'>
-      <a onClick={() => getAlbum(albumId)}>
-        <img src={artworkUrl} />
-        <p>{name}</p>
-        <small>{artistName}</small>
-      </a>
-    </div>
-  )
-}
