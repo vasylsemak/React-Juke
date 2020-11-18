@@ -14,7 +14,8 @@ export default class Main extends React.Component {
       albums: [],
       selectedAlbum: {},
       currentSongId: 0,
-      playing: false
+      playing: false,
+      songList: []
     }
 
     this.getAlbum = this.getAlbum.bind(this);
@@ -22,6 +23,7 @@ export default class Main extends React.Component {
     this.pause = this.pause.bind(this);
     this.reset = this.reset.bind(this);
     this.resume = this.resume.bind(this);
+    this.nextSong = this.nextSong.bind(this);
   }
 
   async componentDidMount() {
@@ -38,25 +40,41 @@ export default class Main extends React.Component {
     } catch (err) { console.log(err, err.message) }
   }
 
-  play(song) {
+  play(song, songs) {
+    console.log('Songs -->', songs);
     AUDIO.src = song.audioUrl;
     AUDIO.load();
     AUDIO.play();
-    this.setState(() => ({ currentSongId: song.id, playing: true }));
+    this.setState({ currentSongId: song.id, playing: true, songList: songs });
   }
 
   pause() {
     AUDIO.pause();
-    this.setState(() => ({ playing: false }));
+    this.setState({ playing: false });
   }
 
   resume() {
     AUDIO.play();
-    this.setState(() => ({ playing: true }));
+    this.setState({ playing: true });
+  }
+
+  nextSong() {
+    const { songList, currentSongId } = this.state;
+    const currSongIdx = songList.map(s => s.id).indexOf(currentSongId);
+    const nextSongIdx = currSongIdx + 1;
+
+    if(nextSongIdx >= songList.length) {
+      AUDIO.pause();
+      AUDIO.src = '';
+      this.setState({ currentSongId: 0, playing: false, songList: [] });
+    } else {
+      AUDIO.pause();
+      this.play(songList[nextSongIdx], songList);
+    }
   }
 
   reset() {
-    this.setState(() => ({ selectedAlbum: {}, currentSongId: 0 }));
+    this.setState({ selectedAlbum: {}, currentSongId: 0 });
   }
 
   render() {
@@ -81,6 +99,7 @@ export default class Main extends React.Component {
           playing={this.state.playing}
           pause={this.pause}
           resume={this.resume}
+          nextSong={this.nextSong}
         />
       </div>
     )
