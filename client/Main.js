@@ -24,24 +24,24 @@ export default class Main extends React.Component {
     this.reset = this.reset.bind(this);
     this.resume = this.resume.bind(this);
     this.nextSong = this.nextSong.bind(this);
+    this.prevSong = this.prevSong.bind(this);
   }
 
   async componentDidMount() {
     try {
       const { data } = await axios.get('/api/albums');
-      this.setState(() => ({ albums: data }));
+      this.setState({ albums: data });
     } catch (err) { console.log(err, err.message) }
   }
 
   async getAlbum(albumId) {
     try {
       const { data } = await axios.get(`/api/albums/${albumId}`);
-      this.setState(() => ({ selectedAlbum: data }));
+      this.setState({ selectedAlbum: data });
     } catch (err) { console.log(err, err.message) }
   }
 
   play(song, songs) {
-    console.log('Songs -->', songs);
     AUDIO.src = song.audioUrl;
     AUDIO.load();
     AUDIO.play();
@@ -60,8 +60,7 @@ export default class Main extends React.Component {
 
   nextSong() {
     const { songList, currentSongId } = this.state;
-    const currSongIdx = songList.map(s => s.id).indexOf(currentSongId);
-    const nextSongIdx = currSongIdx + 1;
+    const nextSongIdx = songList.map(s => s.id).indexOf(currentSongId) + 1;
 
     if(nextSongIdx >= songList.length) {
       AUDIO.pause();
@@ -70,6 +69,20 @@ export default class Main extends React.Component {
     } else {
       AUDIO.pause();
       this.play(songList[nextSongIdx], songList);
+    }
+  }
+
+  prevSong() {
+    const { songList, currentSongId } = this.state;
+    const prevSongIdx = songList.map(s => s.id).indexOf(currentSongId) - 1;
+
+    if(prevSongIdx < 0) {
+      AUDIO.pause();
+      AUDIO.src = '';
+      this.setState({ currentSongId: 0, playing: false, songList: [] })
+    } else {
+      AUDIO.pause();
+      this.play(songList[prevSongIdx], songList);
     }
   }
 
@@ -100,6 +113,7 @@ export default class Main extends React.Component {
           pause={this.pause}
           resume={this.resume}
           nextSong={this.nextSong}
+          prevSong={this.prevSong}
         />
       </div>
     )

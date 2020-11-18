@@ -1,11 +1,11 @@
 import React from 'react';
 
-export default ({ currId, playing, pause, resume, nextSong }) =>
+export default ({ currId, playing, pause, resume, nextSong, prevSong }) =>
   !currId ? null : (
     <div id='player-container'>
       <div id='player-controls'>
         <div className='row center'>
-          <i className='fa fa-step-backward'></i>
+          <i className='fa fa-step-backward' onClick={prevSong}></i>
           <i
             className={playing ? 'fa fa-pause-circle' : 'fa fa-play-circle'}
             onClick={playing ? pause : resume}
